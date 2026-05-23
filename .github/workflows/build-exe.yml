@@ -1,0 +1,48 @@
+name: Build RSP EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "*.py"
+      - "*.spec"
+      - "*.html"
+      - ".github/workflows/build-exe.yml"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build EXE with spec
+        run: |
+          pyinstaller "RSPアイテム一括生成.spec"
+
+      - name: Verify output
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "dist/RSPアイテム一括生成.exe")) {
+            Write-Error "EXE not found at dist/RSPアイテム一括生成.exe"
+            exit 1
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RSPアイテム一括生成-exe
+          path: dist/RSPアイテム一括生成.exe
+          if-no-files-found: error

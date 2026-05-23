@@ -13,3 +13,11 @@
 
 ## ビルド
 手順は `EXE化手順.txt` を参照してください。
+
+## GitHub Actionsでビルド
+このリポジトリには、Windows上でEXEを自動ビルドするワークフローが含まれています。
+
+1. GitHubの `Actions` タブを開く
+2. `Build RSP EXE` を選択
+3. `Run workflow` を実行
+4. 完了後、`Artifacts` から `RSPアイテム一括生成-exe` をダウンロード
